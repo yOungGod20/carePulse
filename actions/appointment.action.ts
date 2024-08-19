@@ -97,7 +97,7 @@ export const getRecentAppointments = async () => {
       appointments: appointments.documents,
       totalCount: appointments.total,
     };
-    revalidatePath("/admin");
+
     return parseStringify(data);
   } catch (error) {
     console.error(
