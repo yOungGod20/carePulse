@@ -1,13 +1,12 @@
 "use server";
 import { InputFile } from "node-appwrite/file";
-import { createPatientParams } from "../types/index";
 import { database, storage } from "@/lib/appwrite.config";
 import { ID, Query } from "node-appwrite";
 import { parseStringify } from "@/lib/utils";
 export const createPatient = async ({
   identificationDocument,
   ...patient
-}: createPatientParams) => {
+}: CreatePatientParams) => {
   try {
     const inputFile = InputFile.fromBuffer(
       identificationDocument?.get("blobFile") as Blob,
