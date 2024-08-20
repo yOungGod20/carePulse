@@ -3,8 +3,9 @@ import { database } from "@/lib/appwrite.config";
 import * as z from "zod";
 import { ID, Query } from "node-appwrite";
 import { revalidatePath } from "next/cache";
-import { parseStringify } from "@/lib/utils";
+import { formatDateTime, parseStringify } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
+import { sendEmail } from "./sendEmail";
 
 export const createAppointment = async (values: CreateAppointmentParams) => {
   try {
@@ -29,8 +30,17 @@ export const updateAppointment = async (values: UpdateAppointmentParams) => {
       values.appointmentId,
       values.appointment
     );
+
     if (!updatedAppointment) {
       throw new Error();
+    }
+    if (values.appointment.status === "scheduled") {
+      const message = `Congratualations! Your appointment with doctor ${
+        values.appointment.primaryPhysician
+      } will take place at${
+        formatDateTime(values.appointment.schedule).dateTime
+      }`;
+      sendEmail({ email: "1746519797@qq.com", message });
     }
     revalidatePath("/admin");
     return parseStringify(updatedAppointment);
@@ -52,7 +62,7 @@ export const getAppointment = async (appointmentId: string) => {
   return parseStringify(appointment);
 };
 
-export const getRecentAppointments = async () => {
+export const getRecentAppointments = async (type: string) => {
   try {
     for (let i = 0; i < 10; i++) {
       // await createAppointment({
@@ -65,11 +75,21 @@ export const getRecentAppointments = async () => {
       //   note: "我下午有空",
       // });
     }
-    const appointments = await database.listDocuments(
-      process.env.DATABASE!,
-      process.env.APPOINTMENT!,
-      [Query.orderDesc("schedule")]
-    );
+    let appointments;
+    if (type === "all") {
+      appointments = await database.listDocuments(
+        process.env.DATABASE!,
+        process.env.APPOINTMENT!,
+        [Query.orderDesc("schedule")]
+      );
+    } else {
+      appointments = await database.listDocuments(
+        process.env.DATABASE!,
+        process.env.APPOINTMENT!,
+        [Query.orderDesc("schedule"), Query.equal("status", [type])]
+      );
+    }
+
     const initialValues = {
       scheduledCount: 0,
       pendingCount: 0,

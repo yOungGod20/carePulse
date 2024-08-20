@@ -169,7 +169,6 @@ const RenderField = ({
           </div>
         </FormControl>
       );
-
     default:
       return "";
   }
