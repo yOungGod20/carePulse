@@ -131,7 +131,7 @@ export const columns: ColumnDef<Appointment>[] = [
             align="start"
             className="bg-dark-300 border-dark-600 flex flex-col p-0"
           >
-            {/* <Dialog
+            <Dialog
               type="schedule"
               description=""
               patientId={appointment.patient?.$id}
@@ -144,7 +144,7 @@ export const columns: ColumnDef<Appointment>[] = [
               patientId={appointment.patient?.$id}
               userId={appointment.userId}
               appointment={appointment}
-            /> */}
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       );

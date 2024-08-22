@@ -67,23 +67,11 @@ export const getAppointment = async (appointmentId: string) => {
 
 export const getRecentAppointments = async (type: string) => {
   try {
-    for (let i = 0; i < 10; i++) {
-      // await createAppointment({
-      //   userId: "66c1912100146fa310d8",
-      //   patient: "66c1918e003a2e1fb01e",
-      //   primaryPhysician: "Hardik Sharma",
-      //   reason: "",
-      //   schedule: new Date(),
-      //   status: "pending",
-      //   note: "我下午有空",
-      // });
-    }
     let appointments;
     if (type === "all") {
       appointments = await database.listDocuments(
         process.env.DATABASE!,
-        process.env.APPOINTMENT!,
-        [Query.orderDesc("schedule")]
+        process.env.APPOINTMENT!
       );
     } else {
       appointments = await database.listDocuments(
@@ -115,6 +103,8 @@ export const getRecentAppointments = async (type: string) => {
       },
       initialValues
     );
+    console.log(appointments.documents);
+    console.log(counts);
     const data = {
       counts,
       appointments: appointments.documents,

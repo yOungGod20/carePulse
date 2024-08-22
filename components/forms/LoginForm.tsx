@@ -18,7 +18,6 @@ const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const searchParams = useSearchParams();
 
   const onSubmit = (values: z.infer<typeof Login>) => {
     try {

@@ -87,15 +87,12 @@ export const login = async ({
     if (!user) {
       return { error: "user not exist" };
     }
-    console.log(password, user.password);
     const isCorrect = await bycrypt.compare(password, user.password);
-    console.log(isCorrect);
     if (!isCorrect) return { error: "password is not correct" };
     // console.log(user);
     if (!user.emailVerification) {
       const token = await createVerificationToken(user.email);
       const message = `Verification Code is ${token?.token}`;
-      console.log(user.email);
       await sendVerificationCode({
         message,
         email: user.email,
