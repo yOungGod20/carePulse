@@ -28,30 +28,28 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
             Start the day with managing new appointments
           </p>
         </section>
-        <Suspense fallback={<div></div>}>
-          <section className="admin-stat">
-            <StatCard
-              type="pending"
-              count={counts.pendingCount}
-              label="Pending appointments"
-              icon={"/assets/icons/pending.svg"}
-            />
-            <StatCard
-              type="appointments"
-              count={counts.scheduledCount}
-              label="Scheduled appointments"
-              icon={"/assets/icons/appointments.svg"}
-            />
-            <StatCard
-              type="cancelled"
-              count={counts.cancelledCount}
-              label="Cancelled appointments"
-              icon={"/assets/icons/cancelled.svg"}
-            />
-          </section>
-        </Suspense>
 
-        <Filter />
+        <section className="admin-stat">
+          <StatCard
+            type="pending"
+            count={counts.pendingCount}
+            label="Pending appointments"
+            icon={"/assets/icons/pending.svg"}
+          />
+          <StatCard
+            type="appointments"
+            count={counts.scheduledCount}
+            label="Scheduled appointments"
+            icon={"/assets/icons/appointments.svg"}
+          />
+          <StatCard
+            type="cancelled"
+            count={counts.cancelledCount}
+            label="Cancelled appointments"
+            icon={"/assets/icons/cancelled.svg"}
+          />
+        </section>
+
         {children}
       </main>
     </div>
