@@ -7,7 +7,7 @@ const NavBar = () => {
   return (
     <nav className="flex justify-between items-center  border-b-2 border-dark-500">
       <div className="flex items-center gap-4">
-        <h1>
+        <h1 className="hidden lg:block">
           <Image
             src={"/assets/icons/logo-full.svg"}
             height={24}
@@ -28,13 +28,16 @@ const NavBar = () => {
       </div>
 
       <div className="flex items-center gap-2 text-zinc-50 text-xl font-bold cursor-pointer hover:text-green-400 ">
-        <LogoutButton>Log out</LogoutButton>
-        <Image
-          src="/assets/icons/logout.svg"
-          height={24}
-          width={24}
-          alt="logout"
-        />
+        <LogoutButton>
+          <span className="hidden lg:block">Log out</span>
+          <Image
+            src="/assets/icons/logout.svg"
+            height={24}
+            width={24}
+            alt="logout"
+            className="mr-4"
+          />
+        </LogoutButton>
       </div>
     </nav>
   );

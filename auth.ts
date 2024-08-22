@@ -14,6 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.name = data.name;
       } else {
         const data = await getUser(token.sub!);
+
         token.id = data.$id;
         token.name = data.name;
       }
