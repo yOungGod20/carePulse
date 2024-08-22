@@ -72,6 +72,9 @@ const RequestSuccess = async ({
             New Appointment
           </Link>
         </Button>
+        <Link href="/main" className="text-green-500 font-bold underline">
+          Back to home
+        </Link>
 
         <p className="copyright">© 2024 CarePluse</p>
       </div>

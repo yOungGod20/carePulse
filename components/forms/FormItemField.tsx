@@ -70,6 +70,29 @@ const RenderField = ({
           </FormControl>
         </div>
       );
+    case FormFieldType.PASSWORD:
+      return (
+        <div className="flex rounded-md border border-dark-500 bg-dark-400 px-2 ">
+          {iconSrc && (
+            <Image
+              src={iconSrc || ""}
+              height={24}
+              width={24}
+              alt={iconAlt || "icon"}
+            />
+          )}
+
+          <FormControl>
+            <Input
+              disabled={disable}
+              placeholder={placeholder || ""}
+              {...field}
+              type={fieldType}
+              className="shad-input border-0"
+            />
+          </FormControl>
+        </div>
+      );
     case FormFieldType.PHONE_INPUT:
       return (
         <FormControl>

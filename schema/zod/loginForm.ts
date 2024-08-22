@@ -28,7 +28,5 @@ export const loginForm = z.object({
 
 export const Login = z.object({
   email: z.string().email(),
-  password: z
-    .string()
-    .min(6, { message: "password supposed to longer than 6 digits" }),
+  password: z.string(),
 });

@@ -84,3 +84,8 @@ export const StatusIcon = {
   pending: "/assets/icons/pending.svg",
   cancelled: "/assets/icons/cancelled.svg",
 };
+
+export const NavBarItem = [
+  { name: "Appointments", href: "/main/appointments" },
+  { name: "Patients", href: "/main/patients" },
+];

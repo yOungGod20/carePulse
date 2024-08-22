@@ -1,5 +1,4 @@
 "use client";
-
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { StatusIcon } from "@/constants";
@@ -7,21 +6,14 @@ import { Doctors } from "@/constants";
 import { cn, formatDateTime } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Badge } from "../ui/badge";
 import { useState } from "react";
 import Dialog from "../alert/Dialog";
 
-export const columns: ColumnDef<Appointment>[] = [
+export const UserColumns: ColumnDef<Appointment>[] = [
   {
     header: "ID",
-    cell: ({ row }) => <p className="text-14-medium "> {row.index + 1}</p>,
+    cell: ({ row }) => <p className="text-14-medium"> {row.index + 1}</p>,
   },
   {
     accessorKey: "patient",
@@ -101,52 +93,18 @@ export const columns: ColumnDef<Appointment>[] = [
 
   {
     id: "actions",
+    header: "Action",
     cell: ({ row }) => {
       const appointment = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 focus-visible:ring-0"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0m0 7a1 1 0 1 0 2 0a1 1 0 1 0-2 0m0-14a1 1 0 1 0 2 0a1 1 0 1 0-2 0"
-                />
-              </svg>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            className="bg-dark-300 border-dark-600 flex flex-col p-0"
-          >
-            {/* <Dialog
-              type="schedule"
-              description=""
-              patientId={appointment.patient?.$id}
-              userId={appointment.userId}
-              appointment={appointment}
-            />
-            <Dialog
-              type="cancel"
-              description=""
-              patientId={appointment.patient?.$id}
-              userId={appointment.userId}
-              appointment={appointment}
-            /> */}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Dialog
+          type="cancel"
+          description=""
+          patientId={appointment.patient?.$id}
+          userId={appointment.userId}
+          appointment={appointment}
+          user={true}
+        />
       );
     },
   },

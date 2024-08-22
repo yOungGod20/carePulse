@@ -4,10 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import LoginForm from "@/components/forms/LoginForm";
+import VerificationModel from "@/components/passkey/VerificationModel";
 const Page = ({ searchParams }: SearchParamProps) => {
   const isAdmin = searchParams.admin === "true";
+  const isVerification = searchParams.verification === "true";
   return (
     <div className="flex h-screen max-h-screen">
+      {isVerification && <VerificationModel></VerificationModel>}
       {isAdmin && <PasskeyModel></PasskeyModel>}
       <section className="remove-scrollbar container my-auto max-w-[520px]  ">
         <div className="sub-container">
@@ -28,7 +31,7 @@ const Page = ({ searchParams }: SearchParamProps) => {
               © 2024 CarePulse
             </p>
             <Link
-              href="/?admin=true"
+              href="/auth/login?admin=true"
               className="text-green-500 underline font-semibold"
             >
               Admin

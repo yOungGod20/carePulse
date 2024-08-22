@@ -6,7 +6,13 @@ import { columns } from "../../components/admin/columns";
 const Page = async ({ searchParams }: SearchParamProps) => {
   const type = (searchParams.type as string) || "all";
   const appointments = await getRecentAppointments(type);
-  return <DataTable data={appointments.appointments} columns={columns} />;
+  return (
+    <DataTable
+      type="admin"
+      data={appointments.appointments}
+      columns={columns}
+    />
+  );
 };
 
 export default Page;

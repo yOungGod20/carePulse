@@ -7,34 +7,42 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Otp from "./otp";
 import { Button } from "../ui/button";
 import Message from "../alert/Message";
-import { decryptKey, encryptKey } from "@/lib/utils";
+import { verification } from "@/actions/register.actions";
 
-const PasskeyModel = () => {
+const VerificationModel = () => {
   const router = useRouter();
   const [passkey, setPasskey] = useState<string>("");
-  const [error, setError] = useState(false);
-  const encryptedKey = localStorage.getItem("accessKey");
-  useEffect(() => {
-    if (encryptedKey) {
-      const key = decryptKey(encryptedKey);
-      if (key === process.env.NEXT_PUBLIC_PASSKEY) {
-        router.replace("/admin");
-      }
+  const [error, setError] = useState("");
+  const email = localStorage.getItem("email");
+  const [isPending, startTransition] = useTransition();
+  const onClick = async () => {
+    if (!email) {
+      setError("NO email");
+      return;
     }
-  }, [encryptedKey]);
+    startTransition(async () => {
+      const res = await verification({ email, token: passkey });
+      if (res?.error) {
+        setError(error);
+      }
+      if (res?.success) {
+        router.push("/auth/login");
+      }
+    });
+  };
   return (
     <AlertDialog open={true}>
       <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle className="flex justify-between items-start">
-            Admin Access Verification
+            Login Verification
             <Image
               src="/assets/icons/close.svg"
               width={20}
@@ -47,7 +55,7 @@ const PasskeyModel = () => {
             />
           </AlertDialogTitle>
           <AlertDialogDescription>
-            To access the admin page, please enter the passkey.
+            To explore the more, please enter the passkey.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <Otp passkey={passkey} setPasskey={setPasskey}></Otp>
@@ -58,25 +66,22 @@ const PasskeyModel = () => {
             classname="border-red-800 text-red-700 font-bold"
           ></Message>
         )}
-        <AlertDialogAction
-          onClick={(e) => {
-            e.preventDefault();
-            setError(false);
-            console.log(passkey);
-            if (passkey == process.env.NEXT_PUBLIC_PASSKEY) {
-              const encryptedKey = encryptKey(passkey);
-              localStorage.setItem("accessKey", encryptedKey);
-              router.replace("/admin");
-            } else {
-              setError(true);
-            }
-          }}
-        >
-          Enter Admin Passkey
+        <AlertDialogAction onClick={onClick}>
+          {isPending ? (
+            <Image
+              src="/assets/icons/loader.svg"
+              className="animate-spin"
+              width={24}
+              height={24}
+              alt="loader"
+            />
+          ) : (
+            "Enter verification code"
+          )}
         </AlertDialogAction>
       </AlertDialogContent>
     </AlertDialog>
   );
 };
 
-export default PasskeyModel;
+export default VerificationModel;

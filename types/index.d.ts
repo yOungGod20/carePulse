@@ -57,6 +57,7 @@ declare type UpdateAppointmentParams = {
 declare type SendEmailParams = {
   email: string;
   message: string;
+  name: string;
 };
 
 declare type Credentials = {

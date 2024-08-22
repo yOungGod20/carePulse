@@ -1,11 +1,14 @@
 "use server";
+import { Appointment } from "./../types/appwrite.types";
+
 import { database } from "@/lib/appwrite.config";
 import * as z from "zod";
 import { ID, Query } from "node-appwrite";
 import { revalidatePath } from "next/cache";
 import { formatDateTime, parseStringify } from "@/lib/utils";
-import { Appointment } from "@/types/appwrite.types";
+
 import { sendEmail } from "./sendEmail";
+import { getUser } from "./register.actions";
 
 export const createAppointment = async (values: CreateAppointmentParams) => {
   try {
@@ -30,7 +33,7 @@ export const updateAppointment = async (values: UpdateAppointmentParams) => {
       values.appointmentId,
       values.appointment
     );
-
+    const user = await getUser(values.userId);
     if (!updatedAppointment) {
       throw new Error();
     }
@@ -40,7 +43,7 @@ export const updateAppointment = async (values: UpdateAppointmentParams) => {
       } will take place at${
         formatDateTime(values.appointment.schedule).dateTime
       }`;
-      sendEmail({ email: "1746519797@qq.com", message });
+      sendEmail({ email: "1746519797@qq.com", message, name: user.name });
     }
     revalidatePath("/admin");
     return parseStringify(updatedAppointment);
@@ -124,5 +127,46 @@ export const getRecentAppointments = async (type: string) => {
       "An error occurred while retrieving the recent appointments:",
       error
     );
+  }
+};
+
+export const getAppointmentByUser = async (userid: string) => {
+  try {
+    const appointments = await database.listDocuments(
+      process.env.DATABASE!,
+      process.env.APPOINTMENT!,
+      [Query.equal("userId", [userid])]
+    );
+    const initialValues = {
+      scheduledCount: 0,
+      pendingCount: 0,
+      cancelledCount: 0,
+    };
+    const counts = (appointments.documents as Appointment[]).reduce(
+      (acc, appointment) => {
+        switch (appointment.status) {
+          case "scheduled":
+            acc.scheduledCount++;
+            break;
+          case "cancelled":
+            acc.cancelledCount++;
+            break;
+          case "pending":
+            acc.pendingCount++;
+            break;
+        }
+        return acc;
+      },
+      initialValues
+    );
+    const data = {
+      counts,
+      appointments: appointments.documents,
+      totalCount: appointments.total,
+    };
+
+    return parseStringify(data);
+  } catch (error) {
+    console.log("An error occurred while getAppointmentByUser:", error);
   }
 };

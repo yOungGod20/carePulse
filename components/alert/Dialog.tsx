@@ -18,23 +18,43 @@ interface DialogProps {
   patientId: string;
   userId: string;
   appointment?: Appointment;
+  user?: boolean;
 }
-const Dialog = ({ patientId, userId, appointment, type }: DialogProps) => {
+const Dialog = ({
+  patientId,
+  userId,
+  appointment,
+  type,
+  user,
+}: DialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <AlertDialog open={isOpen}>
       <AlertDialogTrigger>
-        <Button
-          onClick={() => {
-            setIsOpen(true);
-          }}
-          className={cn("w-full rounded-none ", {
-            "bg-yellow-600 hover:bg-yellow-600/75": type === "schedule",
-            "bg-red-600 hover:bg-red-600/75": type === "cancel",
-          })}
-        >
-          {type === "schedule" ? "Schedule" : "Cancel"}
-        </Button>
+        {user ? (
+          <span
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            className={cn("w-full rounded-none font-simibold text-[16px] ", {
+              "text-[#dc2626]   hover:underline": type === "cancel",
+            })}
+          >
+            {type === "schedule" ? "Schedule" : "Cancel"}
+          </span>
+        ) : (
+          <Button
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            className={cn("w-full rounded-none font-simibold text-sm ", {
+              "bg-yellow-600 hover:bg-yellow-600/75": type === "schedule",
+              "bg-red-600  hover:bg-red-600/75": type === "cancel",
+            })}
+          >
+            {type === "schedule" ? "Schedule" : "Cancel"}
+          </Button>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent className="bg-dark-200">
         <AlertDialogHeader>
