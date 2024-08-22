@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { StatCard } from "@/components/admin/StatCard";
 import { getRecentAppointments } from "@/actions/appointment.action";
-import Filter from "@/components/admin/Filter";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const { counts } = await getRecentAppointments("all");

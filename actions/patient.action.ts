@@ -6,7 +6,7 @@ import { parseStringify } from "@/lib/utils";
 export const createPatient = async ({
   identificationDocument,
   ...patient
-}: CreatePatientParams) => {
+}: any) => {
   try {
     const inputFile = InputFile.fromBuffer(
       identificationDocument?.get("blobFile") as Blob,
