@@ -3,13 +3,14 @@ import PasskeyModel from "@/components/passkey/passkeyModel";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-
+import VerificationModel from "@/components/passkey/VerificationModel";
+import RegisterModel from "@/components/passkey/RegisterModel";
 const Page = ({ searchParams }: SearchParamProps) => {
-  const isAdmin = searchParams.admin === "true";
+  const isVerification = searchParams.verification === "true";
   return (
     <div className="flex h-screen max-h-screen">
-      {isAdmin && <PasskeyModel></PasskeyModel>}
-      <section className="remove-scrollbar container my-auto max-w-[520px]  ">
+      {isVerification && <RegisterModel />}
+      <section className="remove-scrollbar container my-auto max-w-[600px]  ">
         <div className="sub-container">
           <Image
             src="/assets/icons/logo-full.svg"
@@ -20,19 +21,13 @@ const Page = ({ searchParams }: SearchParamProps) => {
           />
           <h2 className="font-bold text-3xl">Hi there 👋</h2>
           <p className="text-sm text-dark-600 mb-12">
-            Schedule your first appointment
+            Register an account to get start
           </p>
           <RegisterForm />
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left font-semibold">
               © 2024 CarePulse
             </p>
-            <Link
-              href="/?admin=true"
-              className="text-green-500 underline font-semibold"
-            >
-              Admin
-            </Link>
           </div>
         </div>
       </section>

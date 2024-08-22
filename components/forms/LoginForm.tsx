@@ -8,9 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormItemField from "./FormItemField";
 import SubmitButton from "./SubmitButton";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { createUser, getUserByEmail, login } from "@/actions/register.actions";
+import { login } from "@/actions/register.actions";
 import Message from "../alert/Message";
 import { Login } from "@/schema/zod/loginForm";
+import Link from "next/link";
 const bcrypt = require("bcryptjs");
 const LoginForm = () => {
   const router = useRouter();
@@ -18,10 +19,11 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const searchParams = useSearchParams();
-  const p = searchParams.get("verification");
+
   const onSubmit = (values: z.infer<typeof Login>) => {
     try {
       setError("");
+      localStorage.setItem("email", values.email);
       startTransition(async () => {
         const res = await login(values);
 
@@ -29,7 +31,6 @@ const LoginForm = () => {
           setError(res.error);
         } else if (res?.success) {
           setSuccess(res.success);
-
           router.push("/auth/login?verification=true");
         } else {
           router.push("/main");
@@ -109,6 +110,15 @@ const LoginForm = () => {
           Login
         </SubmitButton>
       </form>
+      <div className="mt-4 flex justify-between">
+        <span className="text-dark-600 text-sm">Do not have an account?</span>
+        <Link
+          href={"/auth/register"}
+          className="text-green-500 hover:underline text-sm cursor-pointer font-bold"
+        >
+          Sign Up
+        </Link>
+      </div>
     </Form>
   );
 };

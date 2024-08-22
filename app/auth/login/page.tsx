@@ -12,7 +12,7 @@ const Page = ({ searchParams }: SearchParamProps) => {
     <div className="flex h-screen max-h-screen">
       {isVerification && <VerificationModel></VerificationModel>}
       {isAdmin && <PasskeyModel></PasskeyModel>}
-      <section className="remove-scrollbar container my-auto max-w-[520px]  ">
+      <section className="remove-scrollbar container my-auto max-w-[600px]  ">
         <div className="sub-container">
           <Image
             src="/assets/icons/logo-full.svg"
@@ -22,9 +22,7 @@ const Page = ({ searchParams }: SearchParamProps) => {
             className="mb-12 h-10 w-fit"
           />
           <h2 className="font-bold text-3xl">Hi there 👋</h2>
-          <p className="text-sm text-dark-600 mb-12">
-            Schedule your first appointment
-          </p>
+          <p className="text-sm text-dark-600 mb-12">Login to start</p>
           <LoginForm />
           <div className="text-14-regular mt-20 flex justify-between">
             <p className="justify-items-end text-dark-600 xl:text-left font-semibold">

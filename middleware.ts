@@ -6,6 +6,8 @@ export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  if (nextUrl.pathname === "/")
+    return Response.redirect(new URL("/main", nextUrl));
   if (isAuthRoute) {
     return NextResponse.next();
   }

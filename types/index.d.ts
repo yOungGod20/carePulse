@@ -11,9 +11,6 @@ declare interface CreateUserParams {
   email: string;
   phone: string;
 }
-declare interface User extends CreateUserParams {
-  $id: string;
-}
 
 declare interface CreatePatientParams extends CreateUserParams {
   userId: string;
@@ -35,7 +32,14 @@ declare interface CreatePatientParams extends CreateUserParams {
   identificationDocument: FormData | undefined;
   privacyConsent: boolean;
 }
-
+declare type User = {
+  $id: string;
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  emailVerification: string;
+};
 declare type CreateAppointmentParams = {
   userId: string;
   patient: string;

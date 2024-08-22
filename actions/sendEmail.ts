@@ -23,9 +23,9 @@ export const sendVerificationCode = async ({
 }: SendEmailParams) => {
   console.log(email);
   const { data, error } = await resend.emails.send({
-    from: "niubi@yangshen.site",
+    from: "CarePulse@yangshen.site",
     to: [email],
-    subject: "Verification Code",
+    subject: message,
     react: EmailTemplate({ firstName: name, message }),
   });
 

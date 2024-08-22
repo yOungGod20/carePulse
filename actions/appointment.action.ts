@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 import { formatDateTime, parseStringify } from "@/lib/utils";
 
 import { sendEmail } from "./sendEmail";
-import { getUser } from "./register.actions";
+import { getUser } from "./user.action";
 
 export const createAppointment = async (values: CreateAppointmentParams) => {
   try {

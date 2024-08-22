@@ -10,47 +10,68 @@ import { signIn } from "@/auth";
 import { DEFAULT_REDIRECT_TO } from "@/routes";
 import {
   createVerificationToken,
+  deleteRegisterTokenByEmail,
+  getRegisterTokenByEmail,
   getVerificationTokenByEmail,
 } from "./token.action";
 import { sendVerificationCode } from "./sendEmail";
 import { redirect } from "next/dist/server/api-utils";
-export const createUser = async (user: z.infer<typeof loginForm>) => {
+import { createRegisterToken } from "./token.action";
+import { error } from "console";
+import { createUsers, getUserByEmail, updateUser } from "./user.action";
+
+export const register = async ({
+  email,
+  name,
+  phone,
+  password,
+}: z.infer<typeof loginForm>) => {
+  const user = await getUserByEmail(email);
+  if (user) return { error: "This email has been used" };
+
+  const token = await createRegisterToken({ email, name, phone, password });
+  const message = `Verification Code is ${token?.token}`;
+  await sendVerificationCode({
+    message,
+    email,
+    name,
+  });
+  return { success: "The email has been sent successfully" };
+};
+
+export const createUser = async ({
+  userEmail,
+  passkey,
+}: {
+  userEmail: string;
+  passkey: string;
+}) => {
   try {
-    const hashedPassword = bycrypt.hash(user.password, 10);
-    const newUser = await users.create(
-      ID.unique(),
-      user.email,
-      user.phone,
-      hashedPassword,
-      user.name
-    );
-    return { newUser };
+    const { email, password, phone, name, token } =
+      await getRegisterTokenByEmail(userEmail);
+    const isCorrect = await bycrypt.compare(passkey, token);
+    if (!isCorrect) {
+      return { error: "Verification Code is not correct" };
+    }
+    const hashedPassword = await bycrypt.hash(password, 10);
+    console.log("start", password, hashedPassword);
+    const user = await createUsers({
+      email,
+      phone,
+      password: hashedPassword,
+      name,
+    });
+
+    await updateUser({ id: user.$id });
+    await deleteRegisterTokenByEmail(email);
+    return { success: "User has created successfully" };
   } catch (error: any) {
     if (error && error?.code === 409) {
-      console.log(error);
       return {
-        error:
-          "A user with the same id, email, or phone already exists in this project.",
+        error: "A user with the same phone already exists in this project.",
       };
     }
-  }
-};
-
-export const getUser = async (id: string) => {
-  try {
-    const user = await users.get(id);
-    return parseStringify(user);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getUserByEmail = async (email: string) => {
-  try {
-    const user = await users.list([Query.equal("email", [email])]);
-    return user.users[0];
-  } catch (error) {
-    console.log(error);
+    return console.log(error);
   }
 };
 
@@ -66,7 +87,9 @@ export const login = async ({
     if (!user) {
       return { error: "user not exist" };
     }
-    const isCorrect = bycrypt.compare(user.password, password);
+    console.log(password, user.password);
+    const isCorrect = await bycrypt.compare(password, user.password);
+    console.log(isCorrect);
     if (!isCorrect) return { error: "password is not correct" };
     // console.log(user);
     if (!user.emailVerification) {
@@ -102,12 +125,13 @@ export const verification = async ({
 }) => {
   try {
     const existToken = await getVerificationTokenByEmail(email);
-    if (!bycrypt.compare(existToken.token, token)) {
+    const isCorrect = await bycrypt.compare(token, existToken.token);
+    if (!isCorrect) {
       return { error: "Verification code is not correct" };
     }
     const user = await getUserByEmail(email);
     if (!user) return { error: "User not exist" };
-    await users.updateEmailVerification(user?.$id!, true);
+    await updateUser({ id: user.$id });
     return { success: true };
   } catch (error) {
     console.log(error);

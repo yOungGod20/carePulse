@@ -1,4 +1,4 @@
-import { getUser } from "@/actions/register.actions";
+import { getUser } from "@/actions/user.action";
 import PatientForm from "@/components/forms/PatientForm";
 import Image from "next/image";
 import Link from "next/link";

@@ -1,4 +1,5 @@
 "use client";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,30 +13,31 @@ import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Otp from "./otp";
-import { Button } from "../ui/button";
 import Message from "../alert/Message";
-import { verification } from "@/actions/register.actions";
+import { createUser } from "@/actions/register.actions";
 
-const VerificationModel = () => {
+const RegisterModel = () => {
   const router = useRouter();
   const [passkey, setPasskey] = useState<string>("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const [isPending, startTransition] = useTransition();
   const onClick = async () => {
     setError("");
+    setSuccess("");
     const email = localStorage.getItem("email");
     if (!email) {
       setError("NO email");
       return;
     }
     startTransition(async () => {
-      const res = await verification({ email, token: passkey });
+      const res = await createUser({ passkey, userEmail: email });
       if (res?.error) {
-        setError(error);
+        setError(res.error);
       }
       if (res?.success) {
-        router.push("/auth/login");
+        setSuccess(res.success);
       }
     });
   };
@@ -44,7 +46,7 @@ const VerificationModel = () => {
       <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle className="flex justify-between items-start">
-            Login Verification
+            Register Verification
             <Image
               src="/assets/icons/close.svg"
               width={20}
@@ -64,8 +66,15 @@ const VerificationModel = () => {
         {error && (
           <Message
             title="Error"
-            message="Passkey is not correct"
+            message={error}
             classname="border-red-800 text-red-700 font-bold"
+          ></Message>
+        )}
+        {success && (
+          <Message
+            title="Success"
+            message={success}
+            classname="border-green-800 text-green-700 font-bold"
           ></Message>
         )}
         <AlertDialogAction onClick={onClick}>
@@ -86,4 +95,4 @@ const VerificationModel = () => {
   );
 };
 
-export default VerificationModel;
+export default RegisterModel;

@@ -13,7 +13,7 @@ export const loginForm = z.object({
   name: z
     .string()
     .min(1, { message: "Username is required" })
-    .min(6, { message: "The password should not be less than six digits" }),
+    .min(6, { message: "The username should not be less than six digits" }),
   email: z.string().email(),
   phone: z.string().refine(
     (phone) => {
