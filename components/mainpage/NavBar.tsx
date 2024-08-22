@@ -29,14 +29,16 @@ const NavBar = () => {
 
       <div className="flex items-center gap-2 text-zinc-50 text-xl font-bold cursor-pointer hover:text-green-400 ">
         <LogoutButton>
-          <span className="hidden lg:block">Log out</span>
-          <Image
-            src="/assets/icons/logout.svg"
-            height={24}
-            width={24}
-            alt="logout"
-            className="mr-4"
-          />
+          <div className="flex items-center">
+            <span className="hidden lg:block">Log out</span>
+            <Image
+              src="/assets/icons/logout.svg"
+              height={24}
+              width={24}
+              alt="logout"
+              className="mr-4 lg:mr-0 lg:m"
+            />
+          </div>
         </LogoutButton>
       </div>
     </nav>

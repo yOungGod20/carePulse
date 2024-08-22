@@ -18,7 +18,7 @@ const Page = async () => {
   return (
     <>
       <div className="flex flex-col h-full p-4">
-        <section className="flex flex-col items-center gap-4 lg:gap-0">
+        <section className="flex flex-col items-center gap-4 lg:gap-0 lg:flex-row">
           <div className="my-12 min-w-[450px] hidden lg:block">
             <h2 className="text-5xl text-green-300 leading-relaxed letter tracking-normal font-bold  lg:block">
               Welcome back ,
@@ -31,7 +31,7 @@ const Page = async () => {
             src={"/assets/icons/logo-full.svg"}
             height={24}
             width={24}
-            className="w-full"
+            className="w-full lg:hidden"
             alt="main_icon"
           />
           <section className="admin-stat h-[50%] mb-4 lg:mb-0">
