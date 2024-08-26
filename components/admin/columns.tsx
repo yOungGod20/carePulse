@@ -56,7 +56,7 @@ export const columns: ColumnDef<Appointment>[] = [
               height={24}
               alt="status"
             />
-            {appointment.status}
+            <span className="hidden lg:block">{appointment.status}</span>
           </Badge>
         </div>
       );

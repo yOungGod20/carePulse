@@ -1,4 +1,4 @@
-import NavBar from "@/components/mainpage/NavBar";
+import NavBar from "@/components/navbar/NavBar";
 import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";

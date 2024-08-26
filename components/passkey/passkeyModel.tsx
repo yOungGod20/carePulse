@@ -62,7 +62,6 @@ const PasskeyModel = () => {
           onClick={(e) => {
             e.preventDefault();
             setError(false);
-            console.log(passkey);
             if (passkey == process.env.NEXT_PUBLIC_PASSKEY) {
               const encryptedKey = encryptKey(passkey);
               localStorage.setItem("accessKey", encryptedKey);

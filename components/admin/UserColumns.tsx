@@ -31,10 +31,10 @@ export const UserColumns: ColumnDef<Appointment>[] = [
       const appointment = row.original;
 
       return (
-        <div className="w-[100px]">
+        <div className="lg:w-[100px]">
           <Badge
             className={cn(
-              "font-bold flex text-zinc-200  items-center gap-3 cursor-default min-w-[120px]",
+              "font-bold flex text-zinc-200  items-center gap-3 cursor-default lg:min-w-[120px]",
               {
                 "bg-blue-600": appointment.status === "pending",
                 "bg-yellow-600": appointment.status === "scheduled",
@@ -48,7 +48,7 @@ export const UserColumns: ColumnDef<Appointment>[] = [
               height={24}
               alt="status"
             />
-            {appointment.status}
+            <span className="hidden lg:block">{appointment.status}</span>
           </Badge>
         </div>
       );
@@ -61,9 +61,14 @@ export const UserColumns: ColumnDef<Appointment>[] = [
       const appointment = row.original;
 
       return (
-        <p className="text-14-medium">
-          {formatDateTime(appointment.schedule).dateTime}
-        </p>
+        <>
+          <p className="text-sm lg:hidden">
+            {formatDateTime(appointment.schedule).timeMobile}
+          </p>
+          <p className="text-sm hidden lg:block">
+            {formatDateTime(appointment.schedule).dateTime}
+          </p>
+        </>
       );
     },
   },
@@ -80,6 +85,7 @@ export const UserColumns: ColumnDef<Appointment>[] = [
       return (
         <div className="flex items-center gap-2">
           <Image
+            className="hidden lg:block"
             src={img!}
             height={24}
             width={24}

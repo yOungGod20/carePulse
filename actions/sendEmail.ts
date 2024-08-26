@@ -21,7 +21,6 @@ export const sendVerificationCode = async ({
   message,
   name,
 }: SendEmailParams) => {
-  console.log(email);
   const { data, error } = await resend.emails.send({
     from: "CarePulse@yangshen.site",
     to: [email],

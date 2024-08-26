@@ -30,17 +30,28 @@ const Dialog = ({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger className="w-full flex justify-center sm:justify-start">
         {user ? (
           <span
             onClick={() => {
               setIsOpen(true);
             }}
-            className={cn("w-full rounded-none font-simibold text-[16px] ", {
-              "text-[#dc2626]   hover:underline": type === "cancel",
-            })}
+            className={cn(
+              " rounded-none font-simibold text-[16px] flex items-center ",
+              {
+                "text-[#dc2626]   hover:underline": type === "cancel",
+              }
+            )}
           >
-            {type === "schedule" ? "Schedule" : "Cancel"}
+            <Image
+              src={"/assets/icons/cancel.svg"}
+              alt="cancel"
+              width={24}
+              height={24}
+            />
+            <span className="hidden lg:block">
+              {type === "schedule" ? "Schedule" : "Cancel"}
+            </span>
           </span>
         ) : (
           <Button

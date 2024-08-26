@@ -25,6 +25,19 @@ export const createAppointment = async (values: CreateAppointmentParams) => {
   }
 };
 
+export const deleteAppointment = async (id: string) => {
+  try {
+    await database.deleteDocument(
+      process.env.DATABASE!,
+      process.env.APPOINTMENT!,
+      id
+    );
+    revalidatePath("/main");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const updateAppointment = async (values: UpdateAppointmentParams) => {
   try {
     const updatedAppointment = await database.updateDocument(
@@ -103,8 +116,6 @@ export const getRecentAppointments = async (type: string) => {
       },
       initialValues
     );
-    console.log(appointments.documents);
-    console.log(counts);
     const data = {
       counts,
       appointments: appointments.documents,

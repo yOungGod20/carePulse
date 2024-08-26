@@ -32,14 +32,14 @@ export const createPatient = async ({
     console.log(error);
   }
 };
-export const getPatient = async (userId: string) => {
+export const getPatients = async (userId: string) => {
   try {
     const patient = await database.listDocuments(
       process.env.DATABASE!,
       process.env.PATIENT!,
       [Query.equal("userId", [userId])]
     );
-    return parseStringify(patient.documents[0]);
+    return parseStringify(patient.documents);
   } catch (error) {
     console.log(error);
   }

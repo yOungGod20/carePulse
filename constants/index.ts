@@ -89,3 +89,10 @@ export const NavBarItem = [
   { name: "Appointments", href: "/main/appointments" },
   { name: "Patients", href: "/main/patients" },
 ];
+
+export const HomePageNavItem = [
+  { name: "Product", href: "/main/appointments" },
+  { name: "Solutions", href: "/main/patients" },
+  { name: "Resources" },
+  { name: "Pricing" },
+];

@@ -39,25 +39,34 @@ export const formatDateTime = (dateString: Date | string) => {
     minute: "numeric", // numeric minute (e.g., '30')
     hour12: true, // use 12-hour clock (true) or 24-hour clock (false)
   };
+  const timeMobile: Intl.DateTimeFormatOptions = {
+    hour: "numeric", // numeric hour (e.g., '8') // use 12-hour clock (true) or 24-hour clock (false)
+    day: "numeric",
+    month: "numeric",
+  };
 
   const formattedDateTime: string = new Date(dateString).toLocaleString(
-    "en-US",
+    "zh-cn",
     dateTimeOptions
   );
 
   const formattedDateDay: string = new Date(dateString).toLocaleString(
-    "en-US",
+    "zh-cn",
     dateDayOptions
   );
 
   const formattedDate: string = new Date(dateString).toLocaleString(
-    "en-US",
+    "zh-cn",
     dateOptions
   );
 
   const formattedTime: string = new Date(dateString).toLocaleString(
-    "en-US",
+    "zh-cn",
     timeOptions
+  );
+  const formattedTimeMobiel = new Date(dateString).toLocaleDateString(
+    "zh-cn",
+    timeMobile
   );
 
   return {
@@ -65,6 +74,7 @@ export const formatDateTime = (dateString: Date | string) => {
     dateDay: formattedDateDay,
     dateOnly: formattedDate,
     timeOnly: formattedTime,
+    timeMobile: formattedTimeMobiel,
   };
 };
 

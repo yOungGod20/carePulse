@@ -6,6 +6,11 @@ import { stringify } from "querystring";
 import React from "react";
 import Image from "next/image";
 import { UserColumns } from "@/components/admin/UserColumns";
+import AppointmentCard from "@/components/Card/AppointmentCard";
+import { Appointment } from "@/types/appwrite.types";
+import CardList from "@/components/List/CardList";
+import { cn } from "@/lib/utils";
+import PatientList from "@/components/List/PatientList";
 const Page = async () => {
   const session = await auth();
   if (!session) {
@@ -55,10 +60,38 @@ const Page = async () => {
             />
           </section>
         </section>
-        <DataTable type="user" columns={UserColumns} data={appointments} />
+        <section
+          className={cn(
+            "rounded-lg mt-12 flex justify-center w-full self-center",
+            { "w-[480px]": appointments.length === 0 }
+          )}
+        >
+          <PatientList />
+        </section>
+        <h3 className="text-5xl text-zinc-300 font-bold text-center mt-8">
+          Your appointments
+        </h3>
+        <section
+          className={cn(
+            " mt-12 flex justify-center min-h-[480px] self-center",
+            { "w-[480px]": appointments.length === 0 }
+          )}
+        >
+          <CardList appointments={appointments as Appointment[]} />
+        </section>
       </div>
     </>
   );
 };
 
 export default Page;
+
+// {appointments.map((item: Appointment) => {
+//   return (
+//     <AppointmentCard
+//       key={item.$id}
+//       appointment={item}
+//       type={item.status}
+//     />
+//   );
+// })}

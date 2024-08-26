@@ -54,7 +54,7 @@ export const createUser = async ({
       return { error: "Verification Code is not correct" };
     }
     const hashedPassword = await bycrypt.hash(password, 10);
-    console.log("start", password, hashedPassword);
+
     const user = await createUsers({
       email,
       phone,
@@ -84,12 +84,13 @@ export const login = async ({
 }) => {
   try {
     const user = await getUserByEmail(email);
+
     if (!user) {
       return { error: "user not exist" };
     }
     const isCorrect = await bycrypt.compare(password, user.password);
     if (!isCorrect) return { error: "password is not correct" };
-    // console.log(user);
+
     if (!user.emailVerification) {
       const token = await createVerificationToken(user.email);
       const message = `Verification Code is ${token?.token}`;
@@ -101,10 +102,10 @@ export const login = async ({
 
       return { success: "The email has been sent successfully" };
     }
+    console.log("caonima");
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_REDIRECT_TO,
     });
 
     return { user };

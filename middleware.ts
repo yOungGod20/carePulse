@@ -1,14 +1,16 @@
 "use server";
 import { auth } from "@/auth";
-import { authRoutes } from "./routes";
+import { authRoutes, publicRoutes } from "./routes";
 import { NextResponse } from "next/server";
 
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   if (nextUrl.pathname === "/")
-    return Response.redirect(new URL("/main", nextUrl));
+    return Response.redirect(new URL("/homepage", nextUrl));
+  if (isPublicRoute) return NextResponse.next();
   if (isAuthRoute) {
     return NextResponse.next();
   }

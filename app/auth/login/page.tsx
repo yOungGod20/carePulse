@@ -38,11 +38,11 @@ const Page = ({ searchParams }: SearchParamProps) => {
         </div>
       </section>
       <Image
-        src="/assets/images/onboarding-img.png"
-        alt="patient"
-        height={1000}
-        width={1000}
-        className="w-[50%] side-img object-cover"
+        src="/assets/images/login1.jpg"
+        alt="login"
+        width={2000}
+        height={2000}
+        className="side-img  w-[55%] scale-100object-cover"
       />
     </div>
   );

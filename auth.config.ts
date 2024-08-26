@@ -22,6 +22,7 @@ export default {
           const isCorrect = await bcrypt.compare(Data.password, user.password);
 
           if (!isCorrect) return null;
+
           return user;
         } catch (error) {
           console.log(error);

@@ -11,7 +11,6 @@ export const createUsers = async (values: any) => {
       ID.unique(),
       values
     );
-    console.log(parseStringify(newUser));
     return parseStringify(newUser);
   } catch (error) {
     console.log(error);
@@ -20,7 +19,6 @@ export const createUsers = async (values: any) => {
 
 export const updateUser = async ({ id }: { id: string }) => {
   try {
-    console.log("fuck");
     const updatedUser = await database.updateDocument(
       process.env.DATABASE!,
       process.env.USER!,
@@ -48,6 +46,7 @@ export const getUser = async (id: string) => {
 
 export const getUserByEmail = async (email: string) => {
   try {
+    console.log(email);
     const user = await database.listDocuments(
       process.env.DATABASE!,
       process.env.USER!,

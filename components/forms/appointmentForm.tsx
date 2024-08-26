@@ -17,16 +17,19 @@ import {
 } from "@/schema/zod/validation";
 import {
   createAppointment,
+  deleteAppointment,
   updateAppointment,
 } from "@/actions/appointment.action";
 import { useRouter } from "next/navigation";
 import { Appointment } from "@/types/appwrite.types";
 interface AppointmentFormProps {
   userId: string;
-  type: "create" | "schedule" | "cancel";
+  type: "create" | "schedule" | "cancel" | "update";
+  cancelledBy?: "self" | "doctor";
   patientId?: string;
   appointment?: Appointment;
   open?: boolean;
+  doctorId?: string;
   setOpen?: (x: boolean) => void;
 }
 
@@ -36,10 +39,13 @@ const AppointmentForm = ({
   type,
   patientId,
   appointment,
+  cancelledBy,
+  doctorId,
 }: AppointmentFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const AppointmentSchema = getAppointmentSchema(type);
   let status;
   switch (type) {
@@ -51,6 +57,25 @@ const AppointmentForm = ({
       break;
     default:
       status = "pending";
+  }
+  let buttonLabel;
+  let successMessage;
+  switch (type) {
+    case "cancel":
+      buttonLabel = "Cancel Appointment";
+      successMessage = "Appointment has been cancelled!";
+      break;
+    case "schedule":
+      buttonLabel = "Schedule Appointment";
+      successMessage = "Appointment has been scheduled!";
+      break;
+    case "update":
+      buttonLabel = "Update Appointment";
+      successMessage = "Appointment has been updated!";
+      break;
+    default:
+      buttonLabel = "Submit Apppointment";
+      successMessage = "Appointment has been submitted";
   }
   const onSubmit = async (values: z.infer<typeof AppointmentSchema>) => {
     if (type === "create" && patientId) {
@@ -70,7 +95,7 @@ const AppointmentForm = ({
           if (newAppointment) {
             form.reset();
             router.push(
-              `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+              `/patients/${userId}/new-appointment/${patientId}/success?appointmentId=${newAppointment.$id}`
             );
           }
           if (setOpen) {
@@ -79,17 +104,35 @@ const AppointmentForm = ({
         });
       } catch (error) {
         console.log(error);
+      } finally {
+        if (error) {
+          setError(error);
+        }
+        if (success) {
+          setSuccess(successMessage);
+        }
       }
     } else {
       try {
         setError("");
-        const formData = {
+        let formData = {
           appointment: { ...values, status },
           type,
           userId,
           appointmentId: appointment?.$id!,
-          timeZone: "",
         };
+        if (cancelledBy === "doctor" && doctorId) {
+          formData = {
+            appointment: {
+              ...values,
+              status,
+              schedule: new Date(values.schedule),
+            },
+            type,
+            userId,
+            appointmentId: appointment?.$id!,
+          };
+        }
         startTransition(async () => {
           await updateAppointment(formData);
           if (setOpen) {
@@ -98,6 +141,27 @@ const AppointmentForm = ({
         });
       } catch (error) {
         console.log(error);
+      } finally {
+        if (error) {
+          setError(error);
+        }
+        if (success) {
+          setSuccess(successMessage);
+        }
+      }
+    }
+    if (type === "cancel" && cancelledBy === "self") {
+      try {
+        await deleteAppointment(appointment?.$id!);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        if (error) {
+          setError(error);
+        }
+        if (success) {
+          setSuccess(successMessage);
+        }
       }
     }
   };
@@ -113,17 +177,7 @@ const AppointmentForm = ({
       note: appointment ? appointment.note : "",
     },
   });
-  let buttonLabel;
-  switch (type) {
-    case "cancel":
-      buttonLabel = "Cancel Appointment";
-      break;
-    case "schedule":
-      buttonLabel = "Schedule Appointment";
-      break;
-    default:
-      buttonLabel = "Submit Apppointment";
-  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -133,7 +187,7 @@ const AppointmentForm = ({
             name="primaryPhysician"
             label="PrimaryPhysician"
             fieldType={FormFieldType.SELECT}
-            disable={type === "create" ? isPending : true}
+            disable={type === "create" || "update" ? isPending : true}
             placeholder={appointment?.primaryPhysician}
           >
             {Doctors.map((doctor) => {
@@ -165,7 +219,7 @@ const AppointmentForm = ({
               label="Reason for appointment"
               fieldType={FormFieldType.TEXTAREA}
               placeholder="ex:Annual monthly check-up"
-              disable={type === "create" ? isPending : true}
+              disable={type === "create" || "update" ? isPending : true}
             />
             <FormItemField
               control={form.control}
@@ -173,7 +227,7 @@ const AppointmentForm = ({
               label="Additional comments/notes"
               fieldType={FormFieldType.TEXTAREA}
               placeholder="ex:Prefer afternoon appointments, if possible"
-              disable={type === "create" ? isPending : true}
+              disable={type === "create" || "update" ? isPending : true}
             />
           </div>
           <FormItemField
@@ -182,7 +236,7 @@ const AppointmentForm = ({
             label="Expected appointment date"
             fieldType={FormFieldType.DATA_PICKER}
             placeholder="Select your appointment date"
-            disable={type === "cancel" ? false : isPending}
+            disable={type === "cancel" ? true : isPending}
           />
         </>
 
@@ -202,6 +256,13 @@ const AppointmentForm = ({
             classname="text-[#dc2626] border-[#b91c1c]"
             title="Error"
             message={error}
+          />
+        )}
+        {success && (
+          <Message
+            classname="text-green-500 border-green-600"
+            title="Success"
+            message={successMessage}
           />
         )}
 
