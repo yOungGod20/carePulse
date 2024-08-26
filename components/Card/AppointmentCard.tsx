@@ -51,11 +51,11 @@ const AppointmentCard = ({
               <span className="text-sm text-[#9ca3af]">internal medicine</span>
             </div>
           </div>
-          <span className="text-xl text-[#9ca3af] flex  items-center">
+          <span className=" text-[#9ca3af] flex text-sm items-center">
             <Image
               src="/assets/icons/phone.svg"
-              width={24}
-              height={24}
+              width={18}
+              height={18}
               alt="phonenumber"
             />
             : 13152889828
@@ -69,7 +69,7 @@ const AppointmentCard = ({
       </CardHeader>
       <CardContent
         className={cn(
-          "flex justify-between items-start flex-col w-full font-bold gap-4 mt-2",
+          "flex justify-between items-start h-full flex-col w-full font-bold gap-4 mt-2",
           {
             "relative blur-[1px] cursor-default": type === "cancelled",
           }
@@ -136,11 +136,23 @@ const AppointmentCard = ({
               />
               <span>Congratulations!</span>
               <span>Scheduled Successfully!</span>
-              <span>
-                You should arrived at{" "}
+              <span className="text-dark-600 mt-4">
+                You should arrived at &nbsp;
                 <span className="text-green-500">
-                  {formatDateTime(new Date()).dateTime}
-                </span>{" "}
+                  {formatDateTime(appointment.confirmedTime).dateTime}
+                </span>
+              </span>
+              <span className="flex gap-4 text-dark-600">
+                <span>
+                  科室：
+                  <span className="text-green-500">
+                    {appointment.department}
+                  </span>
+                </span>
+                <span>
+                  号码：
+                  <span className="text-green-500">{appointment.number}</span>
+                </span>
               </span>
             </div>
             <CardCancelDialog
@@ -165,8 +177,8 @@ const AppointmentCard = ({
         )}
       </CardContent>
       {type === "cancelled" && (
-        <CardFooter>
-          <Alert className="flex items-center justify-center border-dark-600 mt-4 ">
+        <CardFooter className="py-4">
+          <Alert className="flex items-center  border-dark-600 mt-4 py-2  m-0 justify-start">
             <Image
               src="/assets/icons/error.svg"
               width={32}
@@ -175,8 +187,9 @@ const AppointmentCard = ({
               className="mr-2"
             />
 
-            <AlertDescription className="text-[#dc2626] font-bold text-xl ">
-              Appointment has been cancelled
+            <AlertDescription className="text-[#dc2626] font-bold text-sm ">
+              Appointment has been rejected
+              <p>Reason:{appointment.cancellationReason}</p>
             </AlertDescription>
           </Alert>
         </CardFooter>

@@ -25,12 +25,14 @@ const CardList = async ({ appointments }: { appointments: Appointment[] }) => {
   return (
     <>
       {appointments.length > 0 ? (
-        <div>
+        <div className="grid grid-cols-3 gap-8">
           {appointments.map((item) => {
             return (
-              <div className="grid grid-cols-3">
-                <AppointmentCard type={item.status} appointment={item} />
-              </div>
+              <AppointmentCard
+                key={item.$id}
+                type={item.status}
+                appointment={item}
+              />
             );
           })}
         </div>

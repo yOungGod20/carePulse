@@ -69,13 +69,13 @@ export const formatDateTime = (dateString: Date | string) => {
     timeMobile
   );
 
-  return {
+  return parseStringify({
     dateTime: formattedDateTime,
     dateDay: formattedDateDay,
     dateOnly: formattedDate,
     timeOnly: formattedTime,
     timeMobile: formattedTimeMobiel,
-  };
+  });
 };
 
 export function encryptKey(passkey: string) {

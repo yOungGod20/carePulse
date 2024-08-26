@@ -120,7 +120,7 @@ const RenderField = ({
           <FormControl>
             <DatePicker
               disabled={disable}
-              className="cursor-pointer "
+              className={cn("cursor-pointer", { "text-dark-600": disable })}
               selected={field.value}
               onChange={(date) => field.onChange(date)}
               showTimeSelect

@@ -7,14 +7,14 @@ const Page = async ({ searchParams }: SearchParamProps) => {
   const type = (searchParams.type as string) || "all";
   const appointments = await getRecentAppointments(type);
   return (
-    <Suspense fallback={<div></div>}>
+    <>
       <Filter />
       <DataTable
         type="admin"
         data={appointments.appointments}
         columns={columns}
       />
-    </Suspense>
+    </>
   );
 };
 

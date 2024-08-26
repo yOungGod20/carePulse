@@ -187,7 +187,7 @@ const AppointmentForm = ({
             name="primaryPhysician"
             label="PrimaryPhysician"
             fieldType={FormFieldType.SELECT}
-            disable={type === "create" || "update" ? isPending : true}
+            disable={type === ("create" || "update") ? isPending : true}
             placeholder={appointment?.primaryPhysician}
           >
             {Doctors.map((doctor) => {
@@ -219,7 +219,7 @@ const AppointmentForm = ({
               label="Reason for appointment"
               fieldType={FormFieldType.TEXTAREA}
               placeholder="ex:Annual monthly check-up"
-              disable={type === "create" || "update" ? isPending : true}
+              disable={type === ("create" || "update") ? isPending : true}
             />
             <FormItemField
               control={form.control}
@@ -227,7 +227,7 @@ const AppointmentForm = ({
               label="Additional comments/notes"
               fieldType={FormFieldType.TEXTAREA}
               placeholder="ex:Prefer afternoon appointments, if possible"
-              disable={type === "create" || "update" ? isPending : true}
+              disable={type === ("create" || "update") ? isPending : true}
             />
           </div>
           <FormItemField
@@ -235,11 +235,9 @@ const AppointmentForm = ({
             name="schedule"
             label="Expected appointment date"
             fieldType={FormFieldType.DATA_PICKER}
-            placeholder="Select your appointment date"
-            disable={type === "cancel" ? true : isPending}
+            disable={type === ("create" || "update") ? isPending : true}
           />
         </>
-
         {type === "cancel" && (
           <FormItemField
             control={form.control}
@@ -250,7 +248,33 @@ const AppointmentForm = ({
             disable={isPending}
           />
         )}
-
+        {type === "schedule" && (
+          <>
+            <FormItemField
+              control={form.control}
+              name="confirmedTime"
+              label="Confirmed appointment date"
+              fieldType={FormFieldType.DATA_PICKER}
+              disable={isPending}
+            />
+            <div className="flex gap-4">
+              <FormItemField
+                control={form.control}
+                name="department"
+                label="Department"
+                fieldType={FormFieldType.INPUT}
+                disable={isPending}
+              />
+              <FormItemField
+                control={form.control}
+                name="number"
+                label="Queue number"
+                fieldType={FormFieldType.INPUT}
+                disable={isPending}
+              />
+            </div>
+          </>
+        )}
         {error && (
           <Message
             classname="text-[#dc2626] border-[#b91c1c]"
@@ -265,7 +289,6 @@ const AppointmentForm = ({
             message={successMessage}
           />
         )}
-
         <SubmitButton
           className={
             type === "cancel" ? "bg-red-800 hover:bg-red-900 mt-8" : "mt-8"

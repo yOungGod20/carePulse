@@ -3,6 +3,8 @@ import React from "react";
 import PatientCard from "../Card/PatientCard";
 import { auth } from "@/auth";
 import { getPatients } from "@/actions/patient.action";
+import Link from "next/link";
+import Image from "next/image";
 const PatientList = async () => {
   const session = await auth();
   const patients = (await getPatients(session?.user?.id!)) as Patient[];
@@ -17,7 +19,7 @@ const PatientList = async () => {
           </span>
         </div>
       ) : (
-        <div className="w-full">
+        <div className="w-full flex items-center">
           {patients.map((item) => {
             return (
               <PatientCard
@@ -27,6 +29,19 @@ const PatientList = async () => {
               />
             );
           })}
+          <Link
+            className="text-center flex  items-center"
+            href={`/patients/${session?.user?.id}/register`}
+          >
+            <Image
+              src="/assets/icons/add.svg"
+              width={64}
+              height={64}
+              alt="add"
+              className="cursor-pointer ml-12"
+            />
+            Add new
+          </Link>
         </div>
       )}
     </>
