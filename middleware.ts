@@ -9,7 +9,7 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   if (nextUrl.pathname === "/")
-    return Response.redirect(new URL("/homepage", nextUrl));
+    return Response.redirect(new URL("/auth/register", nextUrl));
   if (isPublicRoute) return NextResponse.next();
   if (isAuthRoute) {
     return NextResponse.next();

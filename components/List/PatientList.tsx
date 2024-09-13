@@ -12,11 +12,11 @@ const PatientList = async () => {
     <>
       {patients.length === 0 ? (
         <div className="text-xl text-dark-600">
-          <span>You don`t have any user</span>
+          {/* <span>You don`t have any user</span>
           <span>
             Click <span className="text-green-400">&nbsp;Here&nbsp;</span> to
             register
-          </span>
+          </span> */}
         </div>
       ) : (
         <div className="w-full flex items-center">

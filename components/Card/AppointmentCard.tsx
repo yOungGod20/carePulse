@@ -188,7 +188,7 @@ const AppointmentCard = ({
             />
 
             <AlertDescription className="text-[#dc2626] font-bold text-sm ">
-              Appointment has been rejected
+              Appointment has been rejected"
               <p>Reason:{appointment.cancellationReason}</p>
             </AlertDescription>
           </Alert>

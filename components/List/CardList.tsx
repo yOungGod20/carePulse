@@ -22,6 +22,8 @@ import PatientList from "./PatientList";
 import { auth } from "@/auth";
 import AppointmentCard from "../Card/AppointmentCard";
 const CardList = async ({ appointments }: { appointments: Appointment[] }) => {
+  const user = await auth();
+  console.log(user);
   return (
     <>
       {appointments.length > 0 ? (
@@ -51,30 +53,9 @@ const CardList = async ({ appointments }: { appointments: Appointment[] }) => {
           <span>Do not have an appointment?</span>
           <span>
             TO
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="link"
-                  className="text-xl text-green-500 font-bold"
-                >
-                  register
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Create a appointment</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    By registering the patient's information, we are informed
-                    and the best treatment plan is specified
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <PatientList />
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction></AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <Button variant="link" className="text-xl text-green-500 font-bold">
+              <Link href={`patients/${user?.user?.id}/register`}>register</Link>
+            </Button>
             a patient and schedule one?
           </span>
         </div>
